@@ -1,7 +1,7 @@
 import { createStore } from 'vuex';
 
 // My custom modules
-import placesModule from './module-template';
+import placesModule from './places';
 import { PlacesState } from './places/state';
 
 
@@ -13,4 +13,5 @@ export default createStore<StateInterface>({
   modules: {
     places: placesModule
   }
+
 });
