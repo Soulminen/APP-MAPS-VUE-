@@ -1,4 +1,4 @@
-import { defineComponent, ref, onMounted } from 'vue';
+import { defineComponent, ref, onMounted, watch } from 'vue';
 import { usePlacesStore } from '../../composables/usePlacesStore';
 import mapboxgl from 'mapbox-gl';
 
@@ -12,10 +12,12 @@ export default defineComponent({
         const mapElement = ref<HTMLDivElement>();
         const { userLocation, isUserlocationReady } = usePlacesStore();
 
-        const initMap = () => {
+        const initMap = async() => {
             if ( !mapElement.value ) throw new Error('Div Element no exits');
             if ( !userLocation.value ) throw new Error('user location no existe');
 
+            await Promise.resolve();
+            
             const map = new mapboxgl.Map({
                 container: mapElement.value, // container ID
                 style: 'mapbox://styles/mapbox/streets-v11', // style URL
@@ -26,13 +28,15 @@ export default defineComponent({
         }
 
         onMounted(() => {
-           if ( isUserlocationReady ) 
+           if ( isUserlocationReady.value ) 
            return initMap();
-           
-           console.log('No tengo localizacion aun');
            
             
         });
+
+        watch ( isUserlocationReady, ( newVal ) => {
+           if ( isUserlocationReady.value ) initMap(); 
+        })
 
         return {
 
