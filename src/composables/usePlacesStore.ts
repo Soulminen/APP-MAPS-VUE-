@@ -1,5 +1,4 @@
 
-
 import { onMounted, computed } from "vue";
 import { useStore } from "vuex";
 import { StateInterface } from '@/store/index';
@@ -23,12 +22,12 @@ export const usePlacesStore = () => {
 
         //Getters
 
-        isUserlocationReady: computed<boolean>( () => store.getters['places/isUserlocationReady'] )
+        isUserlocationReady: computed<boolean>( () => store.getters['places/isUserlocationReady'] ),
 
 
         // Actions
 
-        searchPlacesByTerm: ( query = '' ) =>  store.dispatch('places/searchPlacesByTerm', query),
+        searchPlacesByTerm: ( query = '' ) => store.dispatch('places/searchPlacesByTerm', query ),
 
         // Mutations
     }

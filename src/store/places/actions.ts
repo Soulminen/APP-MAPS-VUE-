@@ -1,8 +1,9 @@
 import { ActionTree } from 'vuex';
 import { PlacesState } from './state';
 import { StateInterface } from '../index';
-import searchApi from '../../apis/searchApi';
-import { PlacesResponse } from '@/interfaces/places';
+import { searchApi } from '@/apis';
+
+import { PlacesResponse,Feature } from '@/interfaces/places';
 
 
 const actions: ActionTree<PlacesState, StateInterface> = {
@@ -19,7 +20,18 @@ const actions: ActionTree<PlacesState, StateInterface> = {
     },
 
 
-    async searchPlacesByTerm({ commit, state }, query: string) {
+    async searchPlacesByTerm({ commit, state }, query: string): Promise<Feature[]> {
+
+        if ( query.length === 0 ) {
+            commit('setPlaces', []);
+            return [];
+        }
+
+        if ( !state.userLocation ) {
+                throw new Error('No hay ubicación del usuario');
+        }
+
+        commit('setIsLoadingPlaces');
 
         const resp = await searchApi.get<PlacesResponse>(`/${ query }.json`, {
             params: {
@@ -27,7 +39,9 @@ const actions: ActionTree<PlacesState, StateInterface> = {
             }
         });
 
-        console.log(resp.data.features);
+        commit('setPlaces', resp.data.features );
+
+        return resp.data.features;
         
         
     }
