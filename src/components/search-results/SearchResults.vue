@@ -45,6 +45,6 @@ h5 {
 }
 
 p {
-    font-size:15px !important;
+    font-size:10px !important;
 }
 </style>
